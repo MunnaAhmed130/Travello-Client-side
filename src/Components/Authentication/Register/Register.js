@@ -2,15 +2,24 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import useAuth from '../../../Hooks/useAuth';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
+
+const Logo = "https://i.ibb.co/C9ShxsJ/airplane.png";
 
 const Register = () => {
-    const { user, handleRegistration } = useAuth();
-    const Logo = "https://i.ibb.co/C9ShxsJ/airplane.png";
+    const { user, handleRegistration, error, loading } = useAuth();
+
     const [passwordShown, setPasswordShown] = useState(false);
+
     const history = useNavigate();
+
     const togglePassword = () => {
         setPasswordShown(!passwordShown);
     }
+
     const { register, handleSubmit } = useForm();
     const onSubmit = data => {
         console.log(data);
@@ -18,9 +27,10 @@ const Register = () => {
             alert('your password did not match')
             return
         }
-        handleRegistration(data.email, data.password, history)
+        handleRegistration(data.email, data.password)
         console.log(user)
     }
+    // const notify = () => toast({ error });
     return (
         <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-md w-full space-y-8">
@@ -35,7 +45,7 @@ const Register = () => {
                     <div className="rounded-md shadow-sm -space-y-px">
                         <div>
                             <label htmlFor="email-address" className="">Email address</label>
-                            <input id="email-address" {...register("email", { required: true, maxLength: 20 })} type="email" required className="appearance-none rounded  block w-full px-3 py-2 my-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Email address" />
+                            <input id="email-address" {...register("email", { required: true })} type="email" required className="appearance-none rounded  block w-full px-3 py-2 my-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Email address" />
                         </div>
                         {/* autoComplete="email" */}
                         <div>
@@ -73,7 +83,7 @@ const Register = () => {
                             </Link>
                         </div>
                     </div>
-
+                    <p>{error}</p>
                     <div>
                         <button type="submit" className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             <span className="absolute left-0 inset-y-0 flex items-center pl-3">
@@ -81,9 +91,24 @@ const Register = () => {
                                 {/* <svg className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                 <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
                             </svg> */}
+                                {/* <svg className="animate-spin h-5 w-5 mr-3 text-indigo-500 " viewBox="0 0 24 24">
+
+                                </svg> */}
                             </span>
                             Register
                         </button>
+                        {/* {error && <ToastContainer
+                            position="top-right"
+                            autoClose={5000}
+                            hideProgressBar={false}
+                            newestOnTop={false}
+                            closeOnClick
+                            rtl={false}
+                            pauseOnFocusLoss
+                            draggable
+                            pauseOnHover
+                        />
+                        <ToastContainer />} */}
                     </div>
                 </form>
             </div>

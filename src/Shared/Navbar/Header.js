@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Transition } from "@headlessui/react";
 import useAuth from '../../Hooks/useAuth';
+// import { SpeakerphoneIcon, XIcon } from '@heroicons/react/outline'
 
 
 const Logo = "https://i.ibb.co/C9ShxsJ/airplane.png";
@@ -13,15 +14,15 @@ const Header = () => {
         <div>
             <nav className="bg-gray-800">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex   h-16">
-                        <div className="flex items-center w-100">
-                            <div className="flex flex-shrink-0 flex-end">
+                    <div className="flex  h-16">
+                        <div className="flex items-center justify-between w-full">
+                            <div className="flex flex-shrink-0 ">
                                 {/* <div className=""> */}
                                 <div>
                                     <img
-                                        className="h-8 w-8 inline-block"
+                                        className="h-8 w-8  inline-block "
                                         src={Logo}
-                                        alt="Workflow"
+                                        alt="Travello"
                                     />
                                     <Link
                                         to="/"
@@ -33,43 +34,43 @@ const Header = () => {
 
                             </div>
                             <div className="hidden md:block ">
-                                <div className="ml-10 flex self-end items-baseline  space-x-4">
+                                <div className=" ">
                                     {/* <span
-                                        href="#"
-                                        className=" hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium"
-                                    >
-                                        Travello
-                                    </span> */}
-
-                                    <Link
-                                        to="/home"
-                                        className="text-gray-300  hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                                    >
-                                        Home
-                                    </Link>
-
-                                    <Link
-                                        to="/blogs"
-                                        className="text-gray-300  hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                                    >
-                                        Blogs
-                                    </Link>
-
-                                    {!user.email && <Link
-                                        to="/login"
-                                        className="text-gray-300  hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                                    >
-                                        Login
-                                    </Link>}
-                                    {user.email && <button
-                                        onClick={logOut}
-                                        className="text-gray-300  hover:text-white px-3 py-2 rounded-md text-sm font-medium">Log Out</button>}
-                                    <span
-                                        className="text-gray-300  hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                                    >
-                                        {user.email}
-                                    </span>
+                                            href="#"
+                                            className=" hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium"
+                                        >
+                                            Travello
+                                        </span> */}
+                                    <div className='items-baseline '>
+                                        <Link
+                                            to="/home"
+                                            className="text-gray-300  hover:text-white px-3 rounded-md text-sm font-medium"
+                                        >
+                                            Home
+                                        </Link>
+                                        <Link
+                                            to="/blogs"
+                                            className="text-gray-300  hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                                        >
+                                            Blogs
+                                        </Link>
+                                        {!user.email && <Link
+                                            to="/login"
+                                            className="text-gray-300  hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                                        >
+                                            Login
+                                        </Link>}
+                                        {user.email && <button
+                                            onClick={logOut}
+                                            className="text-gray-300  hover:text-white px-3 py-2 rounded-md text-sm font-medium">Log Out</button>}
+                                        <span
+                                            className="text-gray-300  hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                                        >
+                                            {user.displayName}
+                                        </span>
+                                    </div>
                                 </div>
+
                             </div>
                         </div>
                         <div className="-mr-2 flex md:hidden">

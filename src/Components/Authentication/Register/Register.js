@@ -11,7 +11,7 @@ const Logo = "https://i.ibb.co/C9ShxsJ/airplane.png";
 
 const Register = () => {
     const { user, handleRegistration, error, loading } = useAuth();
-
+    console.log(loading);
     const [passwordShown, setPasswordShown] = useState(false);
 
     const history = useNavigate();
@@ -20,15 +20,16 @@ const Register = () => {
         setPasswordShown(!passwordShown);
     }
 
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, reset } = useForm();
     const onSubmit = data => {
         console.log(data);
         if (data.password !== data.password2) {
             alert('your password did not match')
             return
         }
-        handleRegistration(data.email, data.password)
+        handleRegistration(data.email, data.password, data.name, history)
         console.log(user)
+        reset();
     }
     // const notify = () => toast({ error });
     return (
@@ -44,6 +45,9 @@ const Register = () => {
                     <input type="hidden" name="remember" value="true" />
                     <div className="rounded-md shadow-sm -space-y-px">
                         <div>
+                            <label htmlFor="name" className="">Name</label>
+                            <input id="name" {...register("name", { required: true })} type="text" required className="appearance-none rounded  block w-full px-3 py-2 my-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Name" />
+                        </div><div>
                             <label htmlFor="email-address" className="">Email address</label>
                             <input id="email-address" {...register("email", { required: true })} type="email" required className="appearance-none rounded  block w-full px-3 py-2 my-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Email address" />
                         </div>
@@ -60,7 +64,7 @@ const Register = () => {
                             <label htmlFor="password2" className="">Confirm Password</label>
                             <input id="password2" {...register("password2", {
                                 // pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/
-                            })} type={passwordShown ? "text" : "password"} autoComplete="current-password" required className="appearance-none rounded block w-full px-3 py-2 my-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Password" />
+                            })} type={passwordShown ? "text" : "password"} autoComplete="current-password" required className="appearance-none rounded block w-full px-3 py-2 my-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Confirm password" />
                         </div>
                     </div>
                     <div className='flex items-center pb-3'>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { getAuth, onAuthStateChanged, sendEmailVerification, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut, } from "firebase/auth";
+import { getAuth, onAuthStateChanged, sendEmailVerification, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup, signOut, } from "firebase/auth";
 import InitializeFirebase from '../Firebase/Firebase.init';
+import axios from 'axios';
 
 
 InitializeFirebase();
@@ -14,16 +15,28 @@ const useFirebase = () => {
     const googleProvider = new GoogleAuthProvider();
 
 
-    const handleRegistration = (email, password) => {
+    const handleRegistration = (email, password, name, history) => {
         setLoading(true);
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 // Signed in 
                 setError('')
-                const user = userCredential.user;
-                // setUser(user)
                 console.log(user)
                 // ...
+                // updating firebase profile
+                updateProfile(auth.currentUser, {
+                    displayName: name,
+                }).then(() => {
+                    // Profile updated!
+                    saveUser(email, name)
+                    // ...
+                }).catch((error) => {
+                    // An error occurred
+                    // ...
+                });
+                // Send a email verification
+                handleEmailVerification();
+                history('/')
             })
             .catch((error) => {
                 setError(error.message);
@@ -32,7 +45,8 @@ const useFirebase = () => {
             .finally(() => setLoading(false));
     }
 
-    const handleLogin = (email, password) => {
+    const handleLogin = (email, password, history) => {
+        setLoading(true);
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 // Signed in 
@@ -46,17 +60,21 @@ const useFirebase = () => {
             .finally(() => setLoading(false))
     }
 
-    const handleGoogleLogin = () => {
+    const handleGoogleLogin = (history, location) => {
+        setLoading(true);
         signInWithPopup(auth, googleProvider)
             .then((result) => {
                 // This gives you a Google Access Token. You can use it to access the Google API.
-                const credential = GoogleAuthProvider.credentialFromResult(result);
+                saveGoogleUser(user.email, user.displayName)
                 // ...
+                const destination = location?.state?.from || '/';
+                history(destination);
+                setError('')
             }).catch((error) => {
                 // Handle Errors here.
                 setError(error.message);
                 // ...
-            });
+            }).finally(() => setLoading(false));
     }
     useEffect(() => {
         const unsubscribed = onAuthStateChanged(auth, (user) => {
@@ -91,13 +109,23 @@ const useFirebase = () => {
         });
     }
 
+    const saveUser = (email, displayName) => {
+        const user = { email, displayName };
+        axios.post('http://localhost:5000/users', user)
+            .then()
+    }
+    const saveGoogleUser = (email, displayName) => {
+        const user = { email, displayName };
+        axios.put('http://localhost:5000/users', user)
+            .then()
+    }
+
     return {
         user,
         error,
         handleRegistration,
         handleLogin,
         handleGoogleLogin,
-        handleEmailVerification,
         logOut
     }
 };
